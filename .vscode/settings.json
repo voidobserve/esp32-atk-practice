@@ -1,0 +1,50 @@
+{
+  // C语言文件的特定设置
+  "[c]": {
+    // 设置缩进大小 
+    "editor.tabSize": 4,
+    // "editor.detectIndentation":true,
+    // 
+    "editor.insertSpaces": false,
+    // 在第80列显示标尺，提醒不要超过80字符宽度（Linux内核规范）
+    "editor.rulers": [
+      80
+    ],
+    // 保存文件时自动格式化
+    "editor.formatOnSave": false,
+  },
+  // C++语言文件的特定设置（与C语言类似）
+  "[cpp]": {
+    // 设置缩进大小  
+    "editor.tabSize": 4,
+    "editor.insertSpaces": false,
+    // 在第80列显示标尺
+    "editor.rulers": [
+      80
+    ],
+    // 保存文件时自动格式化
+    "editor.formatOnSave": false,
+  },
+  // clang-format配置
+  "C_Cpp.formatting": "clangFormat", // 使用 clang-format 进行格式化
+  "C_Cpp.intelliSenseEngine": "default",
+  "idf.openOcdConfigs": [
+    "board/esp32s3-builtin.cfg",
+  ],
+  "idf.toolsPathWin": "C:\\Espressif",
+  "idf.customExtraVars": {
+    "IDF_TARGET": "esp32s3"
+  },
+  "idf.flashType": "UART",
+  "files.associations": {
+    "esp_flash.h": "c",
+    "gpio.h": "c",
+    "led.h": "c"
+  },
+  "idf.currentSetup": "C:/Espressif/frameworks/esp-idf-v5.1.2/",
+  "files.autoGuessEncoding": true,
+  "Codegeex.RepoIndex": true,
+  "C_Cpp.errorSquiggles": "disabled",
+  "idf.port": "COM6",
+  "C_Cpp.autocomplete": "disabled",
+}

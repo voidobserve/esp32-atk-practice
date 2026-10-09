@@ -1,0 +1,12 @@
+# ESP-IDF 构建产物和本地配置
+/build/
+/managed_components/
+/sdkconfig
+/sdkconfig.old
+
+# ESP-IDF 工具生成的 Python 缓存文件
+__pycache__/
+*.py[cod]
+
+# Obsidian 工作区状态
+/.obsidian/

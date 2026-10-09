@@ -1,0 +1,40 @@
+---
+# 基于 LLVM 风格的代码格式化规则
+# 使用自定义大括号换行策略
+BasedOnStyle: LLVM
+BreakBeforeBraces: Custom
+BraceWrapping:
+  # 函数、类、结构体、枚举、命名空间和联合体声明后换行
+  AfterFunction: true
+  AfterClass: true
+  AfterStruct: true
+  AfterEnum: true
+  AfterNamespace: true
+  AfterUnion: true
+  # 不在 else/while 前额外换行
+  BeforeElse: false
+  BeforeWhile: false
+  AfterControlStatement: Never
+# 缩进与制表符设置
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+# 行宽与超长惩罚
+ColumnLimit: 80
+# 每行字符数超过限制时，每超过一个字符，增加的惩罚。0：不进行惩罚
+PenaltyExcessCharacter: 100
+# 指针符号对齐
+PointerAlignment: Right
+# 控制语句前是否空格
+SpaceBeforeParens: ControlStatements
+# 短语句不单行
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+# 宏和连续赋值的对齐策略
+AlignConsecutiveMacros: true
+AlignConsecutiveAssignments: false
+# 额外的 for-each 与语句宏
+ForEachMacros: []
+StatementMacros: []
+
