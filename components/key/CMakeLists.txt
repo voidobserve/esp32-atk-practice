@@ -15,7 +15,6 @@ set(COMPONENT_REQUIRES
 
 # 私有依赖(仅在 .c 内部使用, 不对外暴露)
 set(COMPONENT_PRIV_REQUIRES
-    driver_on_board # 按键引脚来自板级配置
 )
 
 # 注册当前组件

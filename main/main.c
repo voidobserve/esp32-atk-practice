@@ -10,15 +10,15 @@
 
 #include "driver/uart.h"
 
+#include "bsp_xl9555.h"
 #include "exit.h"
 #include "gptimer.h"
+#include "i2c.h"
 #include "key.h"
 #include "led.h"
 #include "timer.h"
 #include "uart0.h"
 #include "user_debug_io.h"
-#include "i2c.h"
-#include "bsp_xl9555.h"
 
 #include "freertos/queue.h"
 
@@ -35,14 +35,11 @@ void app_main(void)
 
     ret = nvs_flash_init(); /* 初始化NVS */
 
-    //
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES ||
-        ret == ESP_ERR_NVS_NEW_VERSION_FOUND) { //
-        //
+        ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
         ESP_ERROR_CHECK(nvs_flash_erase());
         ret = nvs_flash_init();
     }
- 
 
     user_debug_io_init();
     bsp_xl9555_init();
@@ -50,7 +47,7 @@ void app_main(void)
     uart0_init();
     timer_init();
 
-      queue = xQueueCreate(10, sizeof(uint64_t));
+    queue = xQueueCreate(10, sizeof(uint64_t));
     if (!queue) {
         printf("%s\n", __FUNCTION__);
         printf("xQueueCreate fail\n");
