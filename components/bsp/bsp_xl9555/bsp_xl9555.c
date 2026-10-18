@@ -32,7 +32,7 @@ void bsp_xl9555_init(void)
     bsp_xl9555_set_pin_dir(XL9555_IO_MASK_ALL, 0xF003);
 
     bsp_xl9555_set_pin_lev(XL9555_IO_MASK_BEEP, 1);
-    bsp_xl9555_set_pin_lev(XL9555_IO_MASK_SPK_EN, 1);
+    bsp_xl9555_set_pin_lev(XL9555_IO_MASK_SPK_EN, 0);
 }
 
 /**

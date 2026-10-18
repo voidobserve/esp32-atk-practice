@@ -15,6 +15,8 @@ set(COMPONENT_REQUIRES
 
 # 私有依赖(仅在 .c 内部使用, 不对外暴露)
 set(COMPONENT_PRIV_REQUIRES
+    i2c
+    bsp_xl9555
 )
 
 # 注册当前组件

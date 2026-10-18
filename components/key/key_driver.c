@@ -10,7 +10,7 @@ void key_driver_scan(void *scan_param)
     uint8_t key_event = KEY_EVENT_NONE;    // 存放待发送的按键事件
     uint8_t cur_key_value = NO_KEY;        // 存放待发送的按键键值
     uint8_t key_value = NO_KEY;
-    this_scan_param = (struct key_driver_param *)scan_param;
+    this_scan_param = (struct io_key_driver_param *)scan_param;
 
     // 如果扫描时间未到来，不执行按键扫描
     if (this_scan_param->cur_scan_times < this_scan_param->scan_times) {

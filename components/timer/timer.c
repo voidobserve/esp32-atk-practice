@@ -1,8 +1,6 @@
 #include "timer.h"
 #include "esp_timer.h"
 
-#include "led.h"
-
 void esp_timer_callback(void *arg); // 声明
 
 void timer_init(void)
@@ -18,10 +16,8 @@ void timer_init(void)
     esp_timer_start_periodic(esp_timer_handle, TIMER_PERIOD_US);
 }
 
-// extern void user_debug_io_toggle(void);
-
 void esp_timer_callback(void *arg)
 {
-    // LED_TOGGLE();
-    // user_debug_io_toggle();
+    extern void user_10ms_isr(void);
+    user_10ms_isr();
 }

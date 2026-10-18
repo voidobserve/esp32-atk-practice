@@ -47,4 +47,5 @@
   "C_Cpp.errorSquiggles": "disabled",
   "idf.port": "COM6",
   "C_Cpp.autocomplete": "disabled",
+  "C_Cpp.autocompleteAddParentheses": false,
 }

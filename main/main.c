@@ -15,6 +15,7 @@
 #include "gptimer.h"
 #include "i2c.h"
 #include "key.h"
+#include "key_driver.h"
 #include "led.h"
 #include "timer.h"
 #include "uart0.h"
@@ -22,7 +23,10 @@
 
 #include "freertos/queue.h"
 
-QueueHandle_t queue;
+void user_10ms_isr(void)
+{
+    io_key_driver_scan_time_add();
+}
 
 /**
  * @brief 程序入口
@@ -44,22 +48,13 @@ void app_main(void)
     user_debug_io_init();
     bsp_xl9555_init();
     led_init(); /* 初始化LED */
+    io_key_init();
     uart0_init();
     timer_init();
 
-    queue = xQueueCreate(10, sizeof(uint64_t));
-    if (!queue) {
-        printf("%s\n", __FUNCTION__);
-        printf("xQueueCreate fail\n");
-        return;
-    }
-    gptimer_init();
-
     while (1) {
-        uint64_t alarm_val;
-        if (xQueueReceive(queue, &alarm_val, portMAX_DELAY) == pdTRUE) {
-            printf("alarm val = %llu\n", alarm_val);
-        }
+        key_driver_scan((void *)&io_key_driver_param);
+        io_key_event_handle();
 
         vTaskDelay(10);
     }

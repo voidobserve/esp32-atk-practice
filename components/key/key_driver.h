@@ -27,7 +27,7 @@ enum KEY_TYPE
     KEY_TYPE_TOUCH, // 触摸按键
 };
 
-typedef struct key_driver_param
+typedef struct io_key_driver_param
 {
     const uint8_t scan_times; // 按键扫描频率, 单位ms
     /*

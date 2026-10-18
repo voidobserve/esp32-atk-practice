@@ -36,7 +36,7 @@ enum
 {
     XL9555_IO_MASK_AP_INT = ((uint16_t)0x01 << 0),
     XL9555_IO_MASK_QMA_INT = ((uint16_t)0x01 << 1),
-    XL9555_IO_MASK_SPK_EN = ((uint16_t)0x01 << 2),
+    XL9555_IO_MASK_SPK_EN = ((uint16_t)0x01 << 2), // 喇叭使能
     XL9555_IO_MASK_BEEP = ((uint16_t)0x01 << 3),
     XL9555_IO_MASK_OV_PWDN = ((uint16_t)0x01 << 4),
     XL9555_IO_MASK_OV_RESET = ((uint16_t)0x01 << 5),
