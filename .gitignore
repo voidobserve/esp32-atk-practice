@@ -10,3 +10,5 @@ __pycache__/
 
 # Obsidian 工作区状态
 /.obsidian/
+
+/.agent/

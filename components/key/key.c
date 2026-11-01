@@ -110,7 +110,7 @@ void io_key_event_handle(void)
     uint8_t key_event = io_key_driver_param.latest_key_event;
     uint8_t key_val = io_key_driver_param.latest_key_val;
 
-    static uint8_t val = 0;
+    static uint8_t val = 1;
 
     if (key_event == KEY_EVENT_NONE) {
         // key_driver 没有获取到有效事件，直接返回
@@ -123,6 +123,7 @@ void io_key_event_handle(void)
     }
     // 获取io按键事件后，清空key_driver_param中的按键事件
     io_key_driver_param.latest_key_event = KEY_EVENT_NONE;
+    io_key_driver_param.latest_key_val = NO_KEY;
 
     switch (io_key_event) {
     case IO_KEY_EVENT_BOOT_PRESS:
@@ -130,14 +131,21 @@ void io_key_event_handle(void)
         break;
     case IO_KEY_EVENT_BOOT_CLICK:
         printf("boot click\n");
-        // TODO 未生效
-        bsp_xl9555_set_pin_lev(XL9555_IO_MASK_BEEP, !val);
+        {
+            uint8_t next_val = !val;
+            esp_err_t err = bsp_xl9555_set_pin_lev_single(
+                XL9555_IO_MASK_BEEP, next_val);
+            if (err == ESP_OK) {
+                val = next_val;
+            } else {
+                printf("set BEEP level failed: %s\n", esp_err_to_name(err));
+            }
+        }
         break;
     case IO_KEY_EVENT_BOOT_LONG:
         printf("boot long\n");
         break;
     case IO_KEY_EVENT_BOOT_HOLD:
-        // TODO HOLD事件只生效了一次
         printf("boot hold\n");
         break;
     case IO_KEY_EVENT_BOOT_LOOSE:

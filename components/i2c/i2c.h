@@ -12,15 +12,6 @@ enum
 };
 typedef uint8_t i2c_bus_idx_t;
 
-/*
-    由于
-*/
-typedef struct
-{
-    uint8_t *buf;
-    size_t len;
-} i2c_buf_t;
-
 #define I2C_BUS_0_SCL_IO     GPIO_NUM_42
 #define I2C_BUS_0_SDA_IO     GPIO_NUM_41
 #define I2C_BUS_0_FREQ_HZ    ((uint32_t)400 * 1000) // 400K

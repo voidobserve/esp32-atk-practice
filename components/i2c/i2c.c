@@ -3,7 +3,6 @@
 
 esp_err_t i2c_bus_init(i2c_bus_idx_t bus_idx)
 {
-    // if ()
     i2c_config_t i2c_config_param = {0};
     i2c_config_param.mode = I2C_MODE_MASTER;
 
@@ -25,7 +24,3 @@ esp_err_t i2c_bus_init(i2c_bus_idx_t bus_idx)
     return i2c_driver_install(bus_idx, i2c_config_param.mode, 0, 0, 0);
 }
 
-// esp_err_t i2c_bus_transfer(i2c_bus_idx_t bus_idx, uint8_t addr, uint8_t *data,
-//                            size_t size)
-// {
-// }

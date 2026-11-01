@@ -1,5 +1,6 @@
 #include "esp_chip_info.h"
 #include "esp_flash.h"
+#include "esp_log.h"
 #include "esp_psram.h"
 #include "esp_system.h"
 #include "freertos/FreeRTOS.h"
@@ -17,6 +18,7 @@
 #include "key.h"
 #include "key_driver.h"
 #include "led.h"
+#include "test_bsp_xl9555.h"
 #include "timer.h"
 #include "uart0.h"
 #include "user_debug_io.h"
@@ -46,7 +48,19 @@ void app_main(void)
     }
 
     user_debug_io_init();
-    bsp_xl9555_init();
+
+#if TEST_BSP_XL9555_ENABLE
+    // 自检内部会调用 bsp_xl9555_init()，这里不再重复初始化。
+    test_bsp_xl9555_run();
+#else
+    esp_err_t xl9555_err = bsp_xl9555_init();
+
+    if (xl9555_err != ESP_OK) {
+        ESP_LOGE("app", "bsp_xl9555_init failed: %s",
+                 esp_err_to_name(xl9555_err));
+    }
+#endif
+
     led_init(); /* 初始化LED */
     io_key_init();
     uart0_init();

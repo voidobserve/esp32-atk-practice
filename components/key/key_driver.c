@@ -171,18 +171,18 @@ void key_driver_scan(void *scan_param)
             // printf("long time %bu\n", this_scan_param->long_time);
             // printf("press cnt %bu\n", this_scan_param->press_cnt);
             if (this_scan_param->press_cnt == this_scan_param->long_time) {
+                // 按住达到长按阈值时只发送一次 LONG 事件。
                 key_event = KEY_EVENT_LONG;
-
-                // printf("long time %bu\n", this_scan_param->long_time);
-
-                // printf("key event long\n");
-            } else if (this_scan_param->press_cnt == this_scan_param->hold_time) {
+            } else if (this_scan_param->hold_time > 0 &&
+                       this_scan_param->press_cnt >=
+                           this_scan_param->long_time +
+                               this_scan_param->hold_time) {
+                // 长按后每经过一个 hold_time 周期发送一次 HOLD 事件。
                 key_event = KEY_EVENT_HOLD;
-                // 下一次scan_para->press_cnt++,还是会进入到这里
+                // 计数回到长按阈值，重新开始计算下一次 HOLD 间隔。
                 this_scan_param->press_cnt = this_scan_param->long_time;
-                // printf("key event hold\n");
             } else {
-                // press_cnt 没到长按和HOLD次数，返回
+                // 长按阈值或下一次 HOLD 间隔尚未到期，不发送事件。
                 goto label_key_driver_scan_end;
             }
 

@@ -2,6 +2,7 @@
 #define __BSP_XL9555_H__
 
 #include "driver/gpio.h"
+#include "esp_err.h"
 #include "i2c.h"
 #include <stdint.h>
 
@@ -54,18 +55,22 @@ enum
     XL9555_IO_MASK_ALL = (uint16_t)0xFFFF,
 };
 
-void bsp_xl9555_init(void);
-void bsp_xl9555_set_pin_dir(uint16_t pin_mask, uint16_t dir_mask);
-void bsp_xl9555_set_pin_lev(uint16_t pin_mask, uint16_t lev_mask);
-void bsp_xl9555_get_pin_lev(uint16_t pin_mask, uint16_t *lev_mask);
+esp_err_t bsp_xl9555_init(void);
+esp_err_t bsp_xl9555_set_pin_dir(uint16_t pin_mask, uint16_t dir_mask);
+esp_err_t bsp_xl9555_set_pin_lev(uint16_t pin_mask, uint16_t lev_mask);
+esp_err_t bsp_xl9555_get_pin_lev(uint16_t pin_mask, uint16_t *lev_mask);
+
+/* 读回配置寄存器 / 输出寄存器，主要用于自检和排查问题 */
+esp_err_t bsp_xl9555_get_pin_dir(uint16_t pin_mask, uint16_t *dir_mask);
+esp_err_t bsp_xl9555_get_pin_out_lev(uint16_t pin_mask, uint16_t *lev_mask);
 
 /*
     单引脚封装：在掩码接口之上提供 0/1 语义，
     避免把电平误当成 0/1 传给掩码型接口。
     pin 只能指定 XL9555_IO_xxx 中的一个引脚。
 */
-void bsp_xl9555_set_pin_dir_single(uint16_t pin, uint8_t dir);
-void bsp_xl9555_set_pin_lev_single(uint16_t pin, uint8_t lev);
+esp_err_t bsp_xl9555_set_pin_dir_single(uint16_t pin, uint8_t dir);
+esp_err_t bsp_xl9555_set_pin_lev_single(uint16_t pin, uint8_t lev);
 int bsp_xl9555_get_pin_lev_single(uint16_t pin);
 
 int bsp_xl9555_get_int_lev(void);
