@@ -25,9 +25,11 @@
 
 #include "freertos/queue.h"
 
+#include "wifi_sta_demo.h"
+
 void user_10ms_isr(void)
 {
-    io_key_driver_scan_time_add();
+    // io_key_driver_scan_time_add();
 }
 
 /**
@@ -47,6 +49,7 @@ void app_main(void)
         ret = nvs_flash_init();
     }
 
+#if 0
     user_debug_io_init();
 
 #if TEST_BSP_XL9555_ENABLE
@@ -65,10 +68,15 @@ void app_main(void)
     io_key_init();
     uart0_init();
     timer_init();
+#endif
+
+    wifi_sta_demo_start();
 
     while (1) {
+#if 0
         key_driver_scan((void *)&io_key_driver_param);
         io_key_event_handle();
+#endif
 
         vTaskDelay(10);
     }
