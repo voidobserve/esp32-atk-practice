@@ -26,6 +26,7 @@
 #include "freertos/queue.h"
 
 #include "wifi_sta_demo.h"
+#include "tcp_client_demo.h"
 
 void user_10ms_isr(void)
 {
@@ -70,7 +71,11 @@ void app_main(void)
     timer_init();
 #endif
 
-    wifi_sta_demo_start();
+    if (wifi_sta_demo_start())
+    {
+        tcp_client_send_once(TCP_CLIENT_SERVER_IP, TCP_CLIENT_SERVER_PORT,
+                             "hello\n");
+    }
 
     while (1) {
 #if 0
