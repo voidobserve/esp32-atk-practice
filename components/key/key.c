@@ -7,6 +7,8 @@
 
 #include "key_driver.h"
 
+static key_event_cb_t key_event_callback = NULL;
+
 static uint8_t get_key_val(void);
 volatile key_driver_param_t io_key_driver_param = {
     .scan_times = KEY_SCAN_PERIOD,
@@ -104,13 +106,17 @@ void io_key_driver_scan_time_add(void)
     }
 }
 
+// 注册按键事件回调函数
+void io_key_register_cb(key_event_cb_t cb)
+{
+    key_event_callback = cb;
+}
+
 void io_key_event_handle(void)
 {
     uint8_t io_key_event = IO_KEY_EVENT_NONE;
     uint8_t key_event = io_key_driver_param.latest_key_event;
     uint8_t key_val = io_key_driver_param.latest_key_val;
-
-    static uint8_t val = 1;
 
     if (key_event == KEY_EVENT_NONE) {
         // key_driver 没有获取到有效事件，直接返回
@@ -125,22 +131,17 @@ void io_key_event_handle(void)
     io_key_driver_param.latest_key_event = KEY_EVENT_NONE;
     io_key_driver_param.latest_key_val = NO_KEY;
 
+    // 调用按键事件回调函数
+    if (key_event_callback != NULL) {
+        key_event_callback(io_key_event);
+    }
+
     switch (io_key_event) {
     case IO_KEY_EVENT_BOOT_PRESS:
         printf("boot press\n");
         break;
     case IO_KEY_EVENT_BOOT_CLICK:
         printf("boot click\n");
-        {
-            uint8_t next_val = !val;
-            esp_err_t err = bsp_xl9555_set_pin_lev_single(
-                XL9555_IO_MASK_BEEP, next_val);
-            if (err == ESP_OK) {
-                val = next_val;
-            } else {
-                printf("set BEEP level failed: %s\n", esp_err_to_name(err));
-            }
-        }
         break;
     case IO_KEY_EVENT_BOOT_LONG:
         printf("boot long\n");

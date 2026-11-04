@@ -9,6 +9,7 @@
 
 #include <string.h>
 
+#include "esp_timer.h"
 #include "driver/uart.h"
 
 #include "bsp_xl9555.h"
@@ -25,12 +26,36 @@
 
 #include "freertos/queue.h"
 
-#include "wifi_sta_demo.h"
 #include "tcp_client_demo.h"
+#include "wifi_sta_demo.h"
+
+// clang-format off
+#define KEY_MESSAGE_MAX_LEN (48)
+
+/* 按键事件回调：运行在 app_main 任务上下文（不是 ISR），可以安全地做阻塞 send */
+static void on_key_event(uint8_t io_key_event)
+{
+    static char message[KEY_MESSAGE_MAX_LEN];   /* 静态分配，无 malloc */
+    const char *event_name = "UNKNOWN";
+    uint32_t elapsed_ms = (uint32_t)(esp_timer_get_time() / 1000LL);
+
+    switch (io_key_event) {
+    case IO_KEY_EVENT_BOOT_PRESS: event_name = "PRESS"; break;
+    case IO_KEY_EVENT_BOOT_CLICK: event_name = "CLICK"; break;
+    case IO_KEY_EVENT_BOOT_LONG:  event_name = "LONG";  break;
+    case IO_KEY_EVENT_BOOT_HOLD:  event_name = "HOLD";  break;
+    case IO_KEY_EVENT_BOOT_LOOSE: event_name = "LOOSE"; break;
+    default: break;
+    }
+
+    snprintf(message, sizeof(message), "KEY,%s,%lu\n", event_name, (unsigned long)elapsed_ms);
+    tcp_client_send_once(TCP_CLIENT_SERVER_IP, TCP_CLIENT_SERVER_PORT, message);
+}
+// clang-format on
 
 void user_10ms_isr(void)
 {
-    // io_key_driver_scan_time_add();
+    io_key_driver_scan_time_add();
 }
 
 /**
@@ -40,6 +65,7 @@ void user_10ms_isr(void)
  */
 void app_main(void)
 {
+
     esp_err_t ret;
 
     ret = nvs_flash_init(); /* 初始化NVS */
@@ -66,19 +92,23 @@ void app_main(void)
 #endif
 
     led_init(); /* 初始化LED */
-    io_key_init();
+
     uart0_init();
-    timer_init();
+
 #endif
 
-    if (wifi_sta_demo_start())
-    {
+    io_key_init();
+    timer_init();
+
+    io_key_register_cb(on_key_event); // 注册按键事件回调
+
+    if (wifi_sta_demo_start()) {
         tcp_client_send_once(TCP_CLIENT_SERVER_IP, TCP_CLIENT_SERVER_PORT,
                              "hello\n");
     }
 
     while (1) {
-#if 0
+#if 1
         key_driver_scan((void *)&io_key_driver_param);
         io_key_event_handle();
 #endif
